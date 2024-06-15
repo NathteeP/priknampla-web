@@ -1,6 +1,8 @@
 const colorMap = {
     primary: 'bg-orange-500 hover:bg-orange-600',
-    transparent: ''
+    transparent: '',
+    red: 'bg-red-500 hover:bg-red-600',
+    green: 'bg-emerald-400 hover:bg-emerald-500'
 }
 
 const textColorMap = {

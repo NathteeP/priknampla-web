@@ -1,19 +1,24 @@
 import {RouterProvider, createBrowserRouter} from 'react-router-dom'
 import { lazy } from 'react'
-import LandingPage from '../pages/LandingPage'
-import RegisterPage from '../pages/RegisterPage'
-import FavortiePage from '../pages/FavoritePage'
+import HomePage from '../pages/HomePage'
+import ProtectedRoute from '../features/authentication/components/ProtectedRoute'
+import FavoritePage from '../pages/FavoritePage'
 
 const LoginPage = lazy(() => import('../pages/LoginPage'))
+const RegisterPage = lazy(() => import('../pages/RegisterPage'))
 const MainContainer = lazy(() => import('../layouts/MainContainer'))
+const CreateRecipePage = lazy(() => import('../pages/CreateRecipePage'))
 
 const router = createBrowserRouter([
     {
         path: '/',
-        element: <MainContainer />,
+        element:<ProtectedRoute>
+            <MainContainer />
+        </ProtectedRoute>, 
         children: [
-            {path: '/', element: <LandingPage />},
-            {path: 'favorite', element: <FavortiePage />}
+            {path: '/', element: <HomePage />},
+            {path: 'favorite', element: <FavoritePage />},
+            {path: 'create', element: <CreateRecipePage />}
         ]
     },
     {

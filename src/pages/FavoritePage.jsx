@@ -1,4 +1,4 @@
-export default function FavortiePage () {
+export default function FavoritePage () {
     return (
         <>
         Favorite Page

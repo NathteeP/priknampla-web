@@ -9,8 +9,9 @@ const textCenterMap = {
 }
 
 
-export default function Input ({placeholder,type,value,error,onChange,name,textCenter="center"}) {
+export default function Input ({placeholder,type,value,error,onChange,name,textCenter="center",label}) {
    return <div className="w-full">
+    {label? <label htmlFor={name}>{label}</label> : null}
    <input placeholder={placeholder} 
     type={type}
     className={`${textCenterMap[textCenter]} w-full border-[1px] ${error?'border-red-400':'border-gray-400'} py-3 rounded-md px-2
@@ -18,6 +19,7 @@ export default function Input ({placeholder,type,value,error,onChange,name,textC
     value={value}
     onChange={onChange}
     name={name}
+    id={name}
     />
     {error? <small className="text-red-500">{error}</small>: null}
    </div>

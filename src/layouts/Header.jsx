@@ -34,6 +34,7 @@ export default function Header () {
             <div className='grow'></div>
             {authUser? 
             (<Button
+            color='red'
             onClick={() => navigate('/favorite')}>
                 เมนูโปรด
             </Button>
