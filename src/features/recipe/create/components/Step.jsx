@@ -1,29 +1,44 @@
-import { useState } from "react"
 import ClickableInput from "./ClickableInput"
+import Textarea from "../../../../components/Textarea"
+import { useContext } from "react"
+import { CreateRecipeContext } from "../CreateRecipeContext"
 
-const initInput = {
-    header: 'คลิกเพื่อแก้ไข',
-    description: '',
-}
 
-export default function Step ({stepNum}) {
-const [stepInput, setStepInput] = useState(initInput)
+export default function Step ({stepKey, header, description}) {
+
+const {setRecipeBody} = useContext(CreateRecipeContext)
 
 const handleChangeInput = e => {
-    setStepInput(prev => {
-        return {...prev,
-            [e.target.name]: e.target.value
-        }
+    setRecipeBody(prev => {
+        const newValue = {...prev}
+        newValue.step[stepKey-1][e.target.name] = e.target.value
+        return newValue
     })
 }
 
-    return <div className="flex items-center gap-4 ml-2 relative">
-        <span>{stepNum}.</span>
+const deleteStep = () => {
+    setRecipeBody(prev => {
+        const newValue = {...prev}
+        newValue.step[stepKey-1] = null
+        return newValue
+    })
+}
+
+    return <div className="flex flex-col gap-1">
+    <div className="flex items-center gap-4 ml-2 relative">
         <ClickableInput name='header'
-        value={stepInput.header} onChange={handleChangeInput} />
+        value={header} onChange={handleChangeInput} />
         <button className="absolute right-2 top-2 text-2xl"
-        onClick=''
+        onClick={deleteStep}
         >&#10005;</button>
     </div>
+    <div className="ml-[-20px]">
+    <Textarea name='description' placeholder="คำบรรยายขั้นตอน" 
+    rows={2}
+    value={description} onChange={handleChangeInput}
+    />
+    </div>
+    </div>
+    
     
 }

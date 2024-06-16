@@ -10,7 +10,7 @@ export default function LoginPage() {
             </Link>
             <LoginForm />
             <p>ยังไม่มีบัญชี?</p>
-            <p>สมัครสมาชิก <Link className="text-red-500" to='/login'>ที่นี่</Link></p>
+            <p>สมัครสมาชิก <Link className="text-red-500" to='/register'>ที่นี่</Link></p>
         </div>
     )
 }

@@ -1,43 +1,56 @@
-import { useState } from "react";
 import IngredientsTable from "./IngredientsTable";
 import Button from "../../../../components/Button";
-
-const emptyTable = {
-    tableId: '',
-    recipeId: '',
-    header: ''
-}
-
-const initTable = [
-    {...emptyTable, tableId:1}
-]
+import { useContext } from "react";
+import { CreateRecipeContext } from "../CreateRecipeContext";
 
 
 export default function IngredientForm () {
 
-const [table, setTable] = useState(initTable)
+const {recipeBody, setRecipeBody} = useContext(CreateRecipeContext)
 
-const setTableHeader = (tableId,header) => {
-    setTable(prev => {
-        const newTableValue = [...prev]
-        newTableValue[tableId-1].header = header
+const emptyTable = {
+    "header": "",
+    "tableKey": 1,
+    "ingredient": [
+        {
+            ingredientsKey: 1,
+            name: 'คลิกเพื่อแก้ไข',
+            amount: '1',
+            unit: 'ช้อนโต๊ะ'
+        },
+        {
+            ingredientsKey: 2,
+            name: 'วัตถุดิบ 2',
+            amount: '1',
+            unit: 'ช้อนโต๊ะ'
+        }
+    ]
+}
+
+
+const table = recipeBody?.ingredientsTable
+
+const setTableHeader = (tableKey,header) => {
+    setRecipeBody(prev => {
+        const newTableValue = {...prev}
+        newTableValue.ingredientsTable[tableKey-1].header = header
         return newTableValue
     })
 
 }
 
-    const createTable = () => {
-    setTable(prev => {
-        const newTableValue = [...prev]
-        newTableValue.push({...emptyTable, tableId:table.length+1})
+const createTable = () => {
+    setRecipeBody(prev => {
+        const newTableValue = {...prev}
+        newTableValue.ingredientsTable.push({...emptyTable, tableKey:table.length+1})
         return newTableValue
     })
 }
 
-    const deleteTable = tableId => {
-        setTable(prev => {
-            const newTableValue = [...prev]
-            newTableValue[tableId-1] = null
+    const deleteTable = tableKey => {
+        setRecipeBody(prev => {
+            const newTableValue = {...prev}
+            newTableValue.ingredientsTable[tableKey-1] = null
             return newTableValue
         })
     }
@@ -45,15 +58,15 @@ const setTableHeader = (tableId,header) => {
 
     return <>
     <h1 className="text-center text-2xl">วัตถุดิบหรืออุปกรณ์</h1>
-    {table.map(el => el? <IngredientsTable 
+    {table?.map(el => el? <IngredientsTable 
             header={el.header} 
-            tableId={el.tableId} 
-            key={el.tableId} 
+            tableKey={el.tableKey} 
+            key={el.tableKey} 
             setTableHeader={setTableHeader}
             deleteTable={deleteTable} 
             />: null )}
     <div className="bg-lime-200 rounded-lg p-4 flex flex-col gap-4">
-        <Button color='green' width='full'
+        <Button color='brown' width='full'
         onClick={createTable}
         >เพิ่มตารางใหม่</Button>
     </div>

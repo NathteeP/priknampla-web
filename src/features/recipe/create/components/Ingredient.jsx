@@ -1,28 +1,46 @@
-import { useState } from "react";
+import { useContext } from "react";
 import ClickableInput from "./ClickableInput";
+import { CreateRecipeContext } from "../CreateRecipeContext";
 
-const initInput = {
-    name: 'คลิกเพื่อแก้ไข',
-    amount: '1',
-    unit: 'ช้อนโต๊ะ'
-}
 
-export default function Ingredient () {
-const [ingreInput, setIngreInput] = useState(initInput)
+export default function Ingredient ({name, amount, unit, ingredientsKey, tableKey}) {
+
+const {setRecipeBody} = useContext(CreateRecipeContext)
 
 const handleChangeInput = e => {
-    setIngreInput(prev => {return {...prev,[e.target.name]:e.target.value}})
+    setRecipeBody(prev => {
+       const newValue = {...prev}
+         newValue.ingredientsTable[tableKey-1]
+         .ingredient[ingredientsKey-1][e.target.name] = e.target.value
+         return newValue
+    })
 }
 
-    return <div className="grid grid-cols-5">
+const deleteIngredient = () => {
+    setRecipeBody(prev => {
+        const newValue = {...prev}
+        newValue.ingredientsTable[tableKey-1]
+        .ingredient[ingredientsKey-1] = null
+        return newValue
+    })
+}
+
+    return <div className="relative">
+    <div className="grid grid-cols-5">
         <ClickableInput isMainInput name='name'
-        value={ingreInput.name} onChange={handleChangeInput}
+        value={name} onChange={handleChangeInput}
         />
         <ClickableInput name='amount'
-        value={ingreInput.amount} onChange={handleChangeInput}
+        value={amount} onChange={handleChangeInput}
         />
         <ClickableInput name='unit'
-        value={ingreInput.unit} onChange={handleChangeInput}
+        value={unit} onChange={handleChangeInput}
         />
     </div>
+        <button className="absolute right-2 top-3 text-xl text-red-600"
+        onClick={deleteIngredient}
+        >&#10005;</button>
+
+    </div>
+    
 }

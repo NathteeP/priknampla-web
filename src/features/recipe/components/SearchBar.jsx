@@ -1,17 +1,22 @@
 
 import Button from '../../../components/Button'
 import searchicon from '../../../assets/searchicon.svg'
-import { useState } from 'react'
 import recipeApi from '../../../apis/recipe'
+import { useNavigate } from 'react-router-dom'
+import { useContext } from 'react'
+import { SearchContext } from '../../../contexts/SearchContext'
 
-export default function SearchBar ({setSearchResult,placeholder}) {
-    const [searchInput, setSearchInput] = useState('')
+export default function SearchBar ({setSearchResult, placeholder}) {
+    const navigate = useNavigate()
+    const {searchInput, setSearchInput} = useContext(SearchContext)
 
     const handleSearch = async e => {
         e.preventDefault()
-        const res = await recipeApi.search(searchInput)
+        const res = await recipeApi.search(searchInput?.trim())
         setSearchResult(res.data)
+        navigate(`/recipe?search=${searchInput?.trim()}`)
     }
+
 
     return (
     <form onSubmit={handleSearch}

@@ -3,9 +3,9 @@ import Header from "./Header";
 
 export default function MainContainer () {
     return (
-        <>
+        <div className="mb-8">
         <Header />
         <Outlet />
-        </>
+        </div>
     )
 }

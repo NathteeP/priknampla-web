@@ -1,0 +1,36 @@
+ {
+"recipe":
+    {
+    "name": "",
+    "description": "",
+    "preparedTime": ""
+    } ,
+"ingredientsTable":[
+    {
+        "header": "",
+        "tableKey": 1,
+        "ingredient": [
+            {
+                "ingredientsKey": 1,
+                "name": "คลิกเพื่อแก้ไข",
+                "amount": "1",
+                "unit": "ช้อนโต๊ะ"
+            },
+            {
+                "ingredientsKey": 2,
+                "name": "วัตถุดิบ 2",
+                "amount": "1",
+                "unit": "ช้อนโต๊ะ"
+            }
+        ]
+    }
+],
+"step":[
+    {
+        "stepKey": 1,
+        "header": "ขั้นตอนที่ 1",
+        "description": ""
+    }
+]
+    
+}

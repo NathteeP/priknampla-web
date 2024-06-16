@@ -1,26 +1,24 @@
 import { useState } from "react";
 import Input from "../../../../components/Input";
 import Textarea from "../../../../components/Textarea";
+import { useContext } from "react";
+import { CreateRecipeContext } from "../CreateRecipeContext";
 
-const initRecipeInput = {
-    name: '',
-    preparedTime: '',
-    description: '',
-    picture: ''
-}
 
-export default function MainRecipeForm () {
-const [input,setInput] = useState(initRecipeInput)
-const [pictures, setPictures] = useState(null)
-const [pictureNum, setPictureNum] = useState(0)
+export default function MainRecipeForm ({pictures, setPictures}) {
 
-const handleClickPicture = () => {
-    if (pictureNum + 1 < pictures.length) setPictureNum(prev => prev+1)
-    else setPictureNum(0)
-}
+const {recipeBody, setRecipeBody} = useContext(CreateRecipeContext)
+
+const input = recipeBody?.recipe
+
 
 const handleChangeInput = e => {
-    setInput({...input, [e.target.name]: e.target.value})
+    setRecipeBody(prev => {
+        const newValue = {...prev}
+        newValue.recipe[e.target.name] = e.target.value
+        return newValue
+    })
+    
 }
 
     return (
@@ -40,13 +38,10 @@ value={input.description} onChange={handleChangeInput}
 <div>
     <label htmlFor="picture">ภาพประกอบ</label>
     {pictures? <img 
-    className={`${pictures.length > 1 ? "cursor-pointer" : ""}`}
-    onClick={handleClickPicture}
-    src={URL.createObjectURL(pictures[pictureNum])} /> : null}
+    src={URL.createObjectURL(pictures)} /> : null}
     <input type="file" 
     className="w-full"
-    onChange={e => setPictures(e.target.files)}
-    multiple
+    onChange={e => setPictures(e.target.files[0])}
     accept="image/*"
     name="picture"
     id="picture"
