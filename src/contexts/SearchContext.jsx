@@ -5,8 +5,12 @@ export const SearchContext = createContext()
 
 export default function SearchContextProvider({children}) {
     const [searchInput, setSearchInput] = useState('')
+    const [searchResult, setSearchResult] = useState([])
 
-    const contextValue = {searchInput, setSearchInput}
+    
+
+
+    const contextValue = {searchInput, setSearchInput, searchResult, setSearchResult}
 
     return <SearchContext.Provider
         value={contextValue}>

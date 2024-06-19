@@ -1,9 +1,10 @@
 import { useEffect } from "react";
-import Header from "../layouts/Header";
 import { useParams } from "react-router-dom";
 import { useState } from "react";
 import recipeApi from "../apis/recipe";
 import Button from "../components/Button";
+import IngredientsTableRender from "../features/recipe/components/IngredientsTableRender";
+import NotFoundPage from "./NotFoundPage";
 
 export default function RecipePage () {
 const {recipeId} = useParams()
@@ -24,6 +25,7 @@ const [recipe, setRecipe] = useState({})
     },[recipeId])
 
     return <>
+    {recipe? 
     <div>
         <div>
         <div>
@@ -44,11 +46,15 @@ const [recipe, setRecipe] = useState({})
         </div>
         </div>
         <div>
-        ingredients block
+        <IngredientsTableRender
+        recipe={recipe}
+        />
         </div>
         <div>
         step block
         </div>
-    </div>
+    </div> : <NotFoundPage />
+    
+}
     </>
 }

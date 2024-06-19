@@ -7,8 +7,8 @@ import { CreateRecipeContext } from "../CreateRecipeContext";
 const emptyIngredient =  {
     ingredientsKey: 1,
     name: 'คลิกเพื่อแก้ไข',
-    amount: '1',
-    unit: 'ช้อนโต๊ะ'
+    amount: '',
+    unit: ''
 }
 
 
