@@ -1,8 +1,19 @@
 import { useNavigate } from "react-router-dom";
 import Button from "./Button";
+import { useEffect } from "react";
+import { useState } from "react";
 
 export default function RecipeBlock ({header,owner,picture,preparedTime,addFavorite,hasDelete,deleteFavorite,isUserFav,recipeId}) {
     const navigate = useNavigate()
+    const [isFavorite, setIsFavorite] = useState(false)
+
+    const handleIsFavorite = () => {
+       if (isUserFav) setIsFavorite(true)
+    }
+
+    useEffect(() => {
+        handleIsFavorite()
+    },[])
 
     return <div className=" flex rounded-lg h-60 p-4 relative bg-amber-100">
         <div

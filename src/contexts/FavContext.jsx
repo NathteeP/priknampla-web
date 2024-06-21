@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useContext } from "react";
 import { AuthContext } from "./AuthContext";
 import { cloneDeep } from "lodash";
+import { useEffect } from "react";
 
 export const FavContext = createContext()
 
@@ -33,9 +34,13 @@ export default function FavContextProvider({children}) {
         }
     }
     const fetchAllFav = async () => {
-        const res = await favApi.getUserFav(authUser.id)
-        setUserFav(res.data)
+        let res
+        authUser?.id ? res = await favApi.getUserFav(authUser?.id) : null
+        res.data ? setUserFav(res.data) : null
     }
+    useEffect(() => {
+         fetchAllFav()
+    },[])
 
     const contextValue = {addToFav, deleteFav, userFav, setUserFav,
         fetchAllFav

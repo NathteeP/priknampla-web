@@ -8,17 +8,15 @@ import { FavContext } from "../contexts/FavContext"
 export default function FavoritePage () {
     const {authUser} = useContext(AuthContext)
 
-    const {deleteFav, userFav, fetchAllFav} = useContext(FavContext)
+    const {deleteFav, userFav} = useContext(FavContext)
 
-    useEffect(() => {
-        fetchAllFav()
-    },[])
+
 
     return (<>
         <h1 className="text-2xl text-center font-semibold mb-4">เมนูโปรด</h1>
         <div className="grid grid-cols-2">
             
-            {userFav.length > 0 ?
+            {userFav?.length > 0 ?
             userFav?.map(el => <RecipeBlock 
             key={el.recipeId}
             hasDelete

@@ -25,15 +25,13 @@ export default function SearchResultPage () {
         setSearchResult(res.data)
         }
         fetchSearchResult()
-        if (authUser) {
-            fetchAllFav()
-        }
     },[])
 
     const isRecipeUserFav = (recipeId) => {
-        console.log('aaaaaaa')
-        for (let el of userFav) {
-            if (el.recipeId === recipeId) return true 
+        if (authUser && userFav) {
+            for (let el of userFav) {
+                if (el.recipeId === recipeId) return true 
+            }
         }
         return false
     }
@@ -49,6 +47,9 @@ export default function SearchResultPage () {
 
     }
 
+    useEffect(() => {
+        fetchAllFav()
+    },[])
 
     return (<>
    
