@@ -1,5 +1,3 @@
-import { useEffect } from "react"
-import favApi from "../apis/fav"
 import { useContext } from "react"
 import { AuthContext } from "../contexts/AuthContext"
 import RecipeBlock from "../components/RecipeBlock"
@@ -14,7 +12,7 @@ export default function FavoritePage () {
 
     return (<>
         <h1 className="text-2xl text-center font-semibold mb-4">เมนูโปรด</h1>
-        <div className="grid grid-cols-2">
+        <div className="grid grid-cols-2 p-4 gap-4">
             
             {userFav?.length > 0 ?
             userFav?.map(el => <RecipeBlock 

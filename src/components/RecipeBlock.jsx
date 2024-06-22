@@ -21,7 +21,7 @@ export default function RecipeBlock ({header,owner,picture,preparedTime,addFavor
             <div 
             className="flex flex-col gap-2"
             >
-            <h2>{header}</h2>
+            <h2 className="text-xl font-semibold">{header}</h2>
             {hasDelete? 
             <button className="absolute right-2 top-2 text-xl"
             onClick={deleteFavorite}

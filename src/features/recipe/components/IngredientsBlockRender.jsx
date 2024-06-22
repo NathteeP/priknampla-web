@@ -1,5 +1,5 @@
 export default function IngredientsBlockRender ({header,ingredient}) {
-    return <div>
+    return <div className="mb-6">
         <h1 className="font-semibold mb-4">{header}</h1>
         <ul>
         {ingredient.map(el => <li key={el.id} className="grid grid-cols-4">
