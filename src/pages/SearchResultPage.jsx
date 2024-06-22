@@ -13,7 +13,7 @@ import { useState } from "react";
 export default function SearchResultPage () {
     const [searchParams, setSearchParams] = useSearchParams()
     const {searchInput, setSearchInput, searchResult, setSearchResult} = useContext(SearchContext)
-    const {userFav, setUserFav, addToFav, fetchAllFav} = useContext(FavContext)
+    const {userFav, addToFav, fetchAllFav} = useContext(FavContext)
     const {authUser, fetchUser} = useContext(AuthContext)
     const [isFavArray, setIsFavArray] = useState([]) //array of true,false depending on search result
 
@@ -64,16 +64,20 @@ export default function SearchResultPage () {
 
 
 
+    const updateFavArray = (el) => {
+        setIsFavArray(prev =>
+            prev.map(favEl => (favEl.recipeId === el.id ? { ...favEl, isFav: true } : favEl))
+        );
+    };
+
+    const addFavorite = (el) => {
+        addToFav(authUser.id, el.id);
+        updateFavArray(el);
+    };
+
     const handleClickAddFav = (el) => {
-        const addtoFavorite = () => {
-            addToFav(authUser.id,el.id)
-        }
-
-        return authUser ?
-        addtoFavorite :
-        () => navigate('/login')
-
-    }
+        return authUser ? () => addFavorite(el) : () => navigate('/login');
+    };
 
     return (<>
    
@@ -91,7 +95,7 @@ export default function SearchResultPage () {
                 owner={el.displayName}
                 preparedTime={el.preparedTime}
                 addFavorite={handleClickAddFav(el)}
-                isUserFav={isFavArray?.find(favEl => el.id === favEl?.recipeId)?.isFav}
+                isUserFav={isFavArray.find(favEl => el.id === favEl?.recipeId)?.isFav}
                 />) :
                 <h1 className="text-2xl pl-4">ไม่พบข้อมูล...</h1>
         }

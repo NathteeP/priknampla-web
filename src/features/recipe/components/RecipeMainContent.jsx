@@ -7,19 +7,74 @@ import { FavContext } from "../../../contexts/FavContext";
 import { AuthContext } from "../../../contexts/AuthContext";
 import { useEffect } from "react";
 import { useState } from "react";
+import recipeApi from "../../../apis/recipe";
 
 export default function RecipeMainContent ({recipe}) {
 
-    const {addToFav, fetchAllFav, userFav} = useContext(FavContext)
-    const {authUser} = useContext(AuthContext)
+    const {addToFav, fetchAllFav, userFav, modifyRating} = useContext(FavContext)
+    const {authUser, fetchUser} = useContext(AuthContext)
     const [isUserFav, setIsUserFav] = useState(false)
+    const [recipeRating, setRecipeRating] = useState([])
 
     useEffect(() => {
-        fetchAllFav()
-        if (userFav.find(el => el.recipeId = recipe.id)) {
+        fetchUser()
+ 
+    },[])
+
+    useEffect(() => { 
+       
+        const handleRecipeRating = async () => {
+        const res = await recipeApi.getRecipeRating(recipe.id)
+        setRecipeRating(res.data)
+        }
+        if (recipe?.id) handleRecipeRating()
+
+    },[recipe.id])
+
+    useEffect(() => {
+        if (authUser) {
+            fetchAllFav()
+            
+        }
+    }, [authUser])
+
+    useEffect(() => {
+        if (userFav.find(el => el.recipeId === recipe.id)) {
             setIsUserFav(true)
         }
-    },[recipe])
+    }, [userFav])
+
+    const handleAddToFav = () => {
+        addToFav(authUser.id, recipe.id)
+        setIsUserFav(true)
+    }
+
+    const handleCountRating = (field) => {
+        if (recipeRating) {
+            return recipeRating.reduce((acc,el) => {
+            if(el[field]) acc+=1
+            return acc
+        },0)
+    }
+    }
+    
+    const handleClickRatingButton = async (field) => {
+        const curRating = userFav.find(el => el.recipeId === recipe.id) || {}
+        const body = {
+            isEasyToFollow: curRating.isEasyToFollow || false,
+            isTasteGood: curRating.isTasteGood || false,
+            [field]: !curRating[field],
+        };
+        await modifyRating(authUser.id, recipe.id, body)
+        const res = await recipeApi.getRecipeRating(recipe.id)
+        setRecipeRating(res.data)
+        fetchAllFav()
+        }
+
+
+
+
+    
 
     return <div className="flex min-h-[50vh]">
     <div className="flex flex-col gap-2 w-3/5 pr-8 justify-between">
@@ -28,17 +83,24 @@ export default function RecipeMainContent ({recipe}) {
         <h2>โดย คุณ {recipe?.user?.displayName}</h2>
         <h2>เวลาเตรียม {recipe?.preparedTime} นาที</h2>
         <p>{recipe?.description}</p>
-        <p></p>
+        <p className="font-semibold">เป็นเมนูโปรดของ <span>{handleCountRating('isFavorite')}</span> คน</p>
         <div className="flex gap-2">
         {isUserFav? 
+        <Button disabled color="disabled">เมนูนี้เป็นเมนูโปรดของคุณ</Button> :
         <Button textColor='white'
-        onClick={()=>addToFav(authUser.id, recipe.id)}
-        >เพิ่มในเมนูโปรด</Button> :
-        <Button disabled color="disabled">เมนูนี้เป็นเมนูโปรดของคุณ</Button> 
-        
+        onClick={handleAddToFav}
+        >เพิ่มในเมนูโปรด</Button> 
     }
-        <RatingButton tooltip='ทำตามง่าย'><img className="max-w-10" src={clocheLogo} /><span className="text-xl font-semibold">5</span></RatingButton>
-        <RatingButton tooltip='รสชาติดี'><img className="max-w-10" src={plateLogo} /><span className="text-xl font-semibold">5</span></RatingButton>
+        <RatingButton tooltip='ทำตามง่าย'
+        onClick={()=>handleClickRatingButton('isEasyToFollow')}
+        ><img className="max-w-10" src={clocheLogo} /><span className="text-xl font-semibold">
+            {handleCountRating('isEasyToFollow')}
+            </span></RatingButton>
+        <RatingButton tooltip='รสชาติดี'
+        onClick={()=>handleClickRatingButton('isTasteGood')}
+        ><img className="max-w-10" src={plateLogo} /><span className="text-xl font-semibold">
+            {handleCountRating('isTasteGood')}
+            </span></RatingButton>
         </div>
         
     </div>

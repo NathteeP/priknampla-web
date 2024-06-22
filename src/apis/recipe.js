@@ -6,6 +6,7 @@ recipeApi.search = body => axios.get(`/recipe/?search=${body}`)
 recipeApi.getRecipe = recipeId => axios.get(`/recipe/${recipeId}`)
 recipeApi.create = body => axios.post('/recipe', body)
 recipeApi.uploadImage = formData => axios.patch('/recipe/picture',formData)
+recipeApi.getRecipeRating = recipeId => axios.get(`/recipe/rating/${recipeId}`)
 
 
 export default recipeApi

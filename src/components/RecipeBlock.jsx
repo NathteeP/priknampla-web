@@ -1,23 +1,15 @@
 import { useNavigate } from "react-router-dom";
 import Button from "./Button";
-import { useEffect } from "react";
-import { useState } from "react";
 
 export default function RecipeBlock ({header,owner,picture,preparedTime,addFavorite,hasDelete,deleteFavorite,isUserFav,recipeId}) {
     const navigate = useNavigate()
-    const [isFavorite, setIsFavorite] = useState(false)
-
-    const handleIsFavorite = () => {
-       if (isUserFav) setIsFavorite(true)
-    }
-
-    useEffect(() => {
-        handleIsFavorite()
-    },[])
+    const navigateToRecipePage = () => navigate(`/recipe/${recipeId}`)
+    
 
     return <div className=" flex rounded-lg h-60 p-4 relative bg-amber-100">
         <div
-        className="w-1/2 rounded-md"
+        className="w-1/2 rounded-md cursor-pointer"
+        onClick={navigateToRecipePage}
         style={{
             backgroundImage: `url(${picture})`,
             backgroundSize: "cover",
@@ -45,7 +37,7 @@ export default function RecipeBlock ({header,owner,picture,preparedTime,addFavor
             </div>
             {isUserFav
             ? <Button textColor='white' width='full' color="red"
-            onClick={()=> navigate(`/recipe/${recipeId}`)}
+            onClick={navigateToRecipePage}
             >ดูสูตรอาหาร</Button> 
             : <Button textColor='white' width='full'
             onClick={addFavorite}

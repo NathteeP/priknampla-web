@@ -18,6 +18,15 @@ export default function FavContextProvider({children}) {
         }
     }
 
+    const modifyRating = async (userId, recipeId, body) => {
+        try{
+            await favApi.rateRecipe(userId,recipeId,body)
+        } catch (err){
+            console.log(err)
+        }
+    }
+
+
     const deleteFav = async(userId, recipeId) => {
         try {
             const body = {'isFavorite': false}
@@ -35,6 +44,7 @@ export default function FavContextProvider({children}) {
         if (authUser?.id) {
             const res = await favApi.getUserFav(authUser?.id)
             if (res?.data)  setUserFav(res.data)
+                
         }
 
     }
@@ -43,7 +53,7 @@ export default function FavContextProvider({children}) {
     },[authUser])
 
     const contextValue = {addToFav, deleteFav, userFav, setUserFav,
-        fetchAllFav
+        fetchAllFav, modifyRating
     }
 
     return <FavContext.Provider
