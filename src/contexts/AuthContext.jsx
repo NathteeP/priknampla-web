@@ -3,12 +3,12 @@ import { getAccessToken, removeAccessToken, setAccessToken } from "../utils/loca
 import authApi from "../apis/auth";
 
 
+
 export const AuthContext = createContext()
 
 export default function AuthContextProvider({children}) {
     const [authUser, setAuthUser] = useState(null)
 
-useEffect(() => {
     const fetchUser = async () => {
         try {
             if (getAccessToken()) {
@@ -20,7 +20,9 @@ useEffect(() => {
             console.log(err)
         }
     }
-    fetchUser()
+
+useEffect(() => {
+    async () => await fetchUser()
 },[])
 
 const login = async (credentials) => {
@@ -35,7 +37,7 @@ const logout = () => {
     setAuthUser(null)
 }
 
-const contextValue = {authUser, login, logout}
+const contextValue = {authUser, login, logout, fetchUser}
 
 return <AuthContext.Provider
 value={contextValue}>

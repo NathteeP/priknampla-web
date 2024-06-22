@@ -13,43 +13,67 @@ import { useState } from "react";
 export default function SearchResultPage () {
     const [searchParams, setSearchParams] = useSearchParams()
     const {searchInput, setSearchInput, searchResult, setSearchResult} = useContext(SearchContext)
-    const {userFav, addToFav, fetchAllFav, setUserFav} = useContext(FavContext)
-    const {authUser} = useContext(AuthContext)
+    const {userFav, setUserFav, addToFav, fetchAllFav} = useContext(FavContext)
+    const {authUser, fetchUser} = useContext(AuthContext)
+    const [isFavArray, setIsFavArray] = useState([]) //array of true,false depending on search result
 
     const navigate = useNavigate()
 
     useEffect(() => {
-        setSearchInput(searchParams.get('search'))
+        const searchQuery = searchParams.get('search')
+        setIsFavArray([])
+        if (searchQuery) setSearchInput(searchQuery)
+
+        },[])
+
+    useEffect(() => {
         const fetchSearchResult = async () => {
-        const res = await recipeApi.search(searchInput?.trim())
-        setSearchResult(res.data)
+            
+            const res = await recipeApi.search(searchInput.trim())
+            setSearchResult(res.data)
+            
         }
+
         fetchSearchResult()
+            
+        },[searchInput])
+        
+        useEffect(() => {
+            fetchUser()
+        },[])
+        
+        useEffect(() => {
+            if (authUser) fetchAllFav()
+                
     },[])
 
-    const isRecipeUserFav = (recipeId) => {
-        if (authUser && userFav) {
-            for (let el of userFav) {
-                if (el.recipeId === recipeId) return true 
-            }
-        }
-        return false
+    useEffect(() => {
+        const handleIsFavArray = () => {
+            const objectTemplate = {recipeId: '', isFav: false}
+            return searchResult[0]?.reduce((acc,el) => {
+                acc.push(userFav?.find(favEl => favEl.recipeId === el.id)? 
+            {...objectTemplate, recipeId: el.id, isFav: true} : 
+            {...objectTemplate, recipeId: el.id, isFav: false})
+            return acc
+        },[])
     }
+    if (searchResult.length > 0) {
+        setIsFavArray(handleIsFavArray())
+    }
+    },[searchResult, userFav])
+
+
 
     const handleClickAddFav = (el) => {
-        const AddtoFavorite = () => {
+        const addtoFavorite = () => {
             addToFav(authUser.id,el.id)
         }
 
         return authUser ?
-        AddtoFavorite :
+        addtoFavorite :
         () => navigate('/login')
 
     }
-
-    useEffect(() => {
-        fetchAllFav()
-    },[])
 
     return (<>
    
@@ -67,7 +91,7 @@ export default function SearchResultPage () {
                 owner={el.displayName}
                 preparedTime={el.preparedTime}
                 addFavorite={handleClickAddFav(el)}
-                isUserFav={isRecipeUserFav(el.id)}
+                isUserFav={isFavArray?.find(favEl => el.id === favEl?.recipeId)?.isFav}
                 />) :
                 <h1 className="text-2xl pl-4">ไม่พบข้อมูล...</h1>
         }

@@ -1,7 +1,13 @@
-import { useState } from "react";
+import { useEffect } from "react";
 import SearchBar from "../features/recipe/components/SearchBar";
+import { useContext } from "react";
+import { FavContext } from "../contexts/FavContext";
 
 export default function LandingPage() {
+const {setUserFav} = useContext(FavContext)
+    useEffect(() => {
+        setUserFav([])
+    },[])
 
     return (
         <div style={{height: 'calc(100vh - 92px)'}} 

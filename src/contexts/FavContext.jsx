@@ -1,16 +1,13 @@
-import { createContext } from "react";
+import { createContext, useState, useContext, useEffect } from "react";
 import favApi from "../apis/fav";
-import { useState } from "react";
-import { useContext } from "react";
 import { AuthContext } from "./AuthContext";
 import { cloneDeep } from "lodash";
-import { useEffect } from "react";
 
 export const FavContext = createContext()
 
 export default function FavContextProvider({children}) {
     const [userFav, setUserFav] = useState([])
-    const {authUser} = useContext(AuthContext)
+    const {authUser, fetchUser} = useContext(AuthContext)
 
     const addToFav = async (userId, recipeId) => {
         try {
@@ -34,13 +31,16 @@ export default function FavContextProvider({children}) {
         }
     }
     const fetchAllFav = async () => {
-        let res
-        authUser?.id ? res = await favApi.getUserFav(authUser?.id) : null
-        res.data ? setUserFav(res.data) : null
+        if (!authUser?.id) await fetchUser()
+        if (authUser?.id) {
+            const res = await favApi.getUserFav(authUser?.id)
+            if (res?.data)  setUserFav(res.data)
+        }
+
     }
     useEffect(() => {
-         fetchAllFav()
-    },[])
+         if (authUser?.id) fetchAllFav()
+    },[authUser])
 
     const contextValue = {addToFav, deleteFav, userFav, setUserFav,
         fetchAllFav

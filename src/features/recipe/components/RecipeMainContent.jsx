@@ -19,7 +19,7 @@ export default function RecipeMainContent ({recipe}) {
         if (userFav.find(el => el.recipeId = recipe.id)) {
             setIsUserFav(true)
         }
-    },[])
+    },[recipe])
 
     return <div className="flex min-h-[50vh]">
     <div className="flex flex-col gap-2 w-3/5 pr-8 justify-between">
