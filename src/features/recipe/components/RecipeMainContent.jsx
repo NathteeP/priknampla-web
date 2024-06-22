@@ -59,7 +59,7 @@ export default function RecipeMainContent ({recipe}) {
     }
     
     const handleClickRatingButton = async (field) => {
-        const curRating = userFav.find(el => el.recipeId === recipe.id) || {}
+        const curRating = recipeRating.find(el => el.userId === authUser.id) || {}
         const body = {
             isEasyToFollow: curRating.isEasyToFollow || false,
             isTasteGood: curRating.isTasteGood || false,
@@ -68,7 +68,6 @@ export default function RecipeMainContent ({recipe}) {
         await modifyRating(authUser.id, recipe.id, body)
         const res = await recipeApi.getRecipeRating(recipe.id)
         setRecipeRating(res.data)
-        fetchAllFav()
         }
 
 
