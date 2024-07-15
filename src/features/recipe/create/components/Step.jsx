@@ -4,7 +4,7 @@ import { useContext } from "react"
 import { CreateRecipeContext } from "../CreateRecipeContext"
 
 
-export default function Step ({stepKey, header, description}) {
+export default function Step ({stepKey, header, description, error}) {
 
 const {setRecipeBody} = useContext(CreateRecipeContext)
 
@@ -26,8 +26,12 @@ const deleteStep = () => {
 
     return <div className="flex flex-col gap-1">
     <div className="flex items-center gap-4 ml-2 relative">
-        <ClickableInput name='header'
-        value={header} onChange={handleChangeInput} />
+        <ClickableInput 
+        name='header'
+        value={header} 
+        onChange={handleChangeInput} 
+        error={error?.header}
+        />
         <button className="absolute right-2 top-2 text-2xl"
         onClick={deleteStep}
         >&#10005;</button>
@@ -35,7 +39,9 @@ const deleteStep = () => {
     <div className="ml-[-20px]">
     <Textarea name='description' placeholder="คำบรรยายขั้นตอน" 
     rows={2}
-    value={description} onChange={handleChangeInput}
+    value={description} 
+    onChange={handleChangeInput}
+    error={error?.description}
     />
     </div>
     </div>

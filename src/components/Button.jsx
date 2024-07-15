@@ -22,7 +22,7 @@ const widthMap = {
 export default function Button ({children,color='primary',textColor,width,onClick,semibold,disabled}) {
     return <button
     className={`px-2 py-2 ${colorMap[color]} ${widthMap[width]} ${textColorMap[textColor]} ${
-        semibold?'font-semibold text-xl':''} ${disabled? 'disabled': ''} rounded-md grow`}
+        semibold?'font-semibold text-xl':''} ${disabled? 'disabled': ''} rounded-md grow text-center`}
     onClick={onClick}
     >
         {children}

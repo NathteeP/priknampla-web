@@ -1,7 +1,7 @@
 import { useState } from "react"
 import Input from "../../../../components/Input"
 
-export default function ClickableInput ({placeholder,name,value,onChange,label,isMainInput=false}) {
+export default function ClickableInput ({placeholder,name,value,onChange,label,isMainInput=false,error}) {
     const [isEdit, setIsEdit] = useState(false)
 
     return (

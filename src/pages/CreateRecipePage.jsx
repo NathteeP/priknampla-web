@@ -9,11 +9,20 @@ import recipeApi from "../apis/recipe";
 import { useNavigate } from "react-router-dom";
 import { cloneDeep } from "lodash";
 import { useState } from "react";
+import PulseDot from "../components/PulseDot";
+import { toast } from "sonner";
 
 export default function CreateRecipePage () {
 
 const [pictures, setPictures] = useState(null)
-const {recipeBody, setRecipeBody} = useContext(CreateRecipeContext)
+const [submitLoading, setSubmitLoading] = useState(false)
+const {
+    recipeBody, 
+    setRecipeBody, 
+    recipeError,
+    setRecipeError,
+    validateRecipeBody,
+} = useContext(CreateRecipeContext)
 const navigate = useNavigate()
 
 const sanitizeRecipeBody = recipeBody => {
@@ -23,10 +32,10 @@ for (let i in sanitizedObj.ingredientsTable) {
     const el = sanitizedObj.ingredientsTable[i]
     if (el) {
     delete el.tableKey
-    for (let i in el.ingredient) {
-        el.ingredient[i] 
-        ? delete el.ingredient[i].ingredientsKey
-        : el.ingredient.splice(i,1)
+    for (let j in el.ingredient) {
+        el.ingredient[j] 
+        ? delete el.ingredient[j].ingredientsKey
+        : el.ingredient.splice(j,1)
     }
     }
     else sanitizedObj.ingredientsTable.splice(i,1)
@@ -42,9 +51,40 @@ sanitizedObj.recipe.preparedTime = +sanitizedObj.recipe.preparedTime
 return sanitizedObj
 }
 
+const checkForErrors = (errorObj) => {
+    if (typeof errorObj === 'string') {
+        return errorObj !== "";
+    }
+    if (Array.isArray(errorObj)) {
+        return errorObj.some(item => checkForErrors(item));
+    }
+    if (typeof errorObj === 'object') {
+        return Object.values(errorObj).some(val => checkForErrors(val));
+    }
+    return false;
+}
+
 
 const handleClickSaveRecipe = async () => {
-    try{
+        setSubmitLoading(true)
+        const errors = validateRecipeBody(recipeBody)
+        setRecipeError(errors)
+
+        const hasErrors = checkForErrors(errors)
+
+        if (hasErrors) {
+            console.log("Form has errors")
+            if (!pictures) {
+                console.log("No image uploaded");
+                setRecipeError(prev => ({ ...prev, picture: "กรุณาอัปโหลดรูปภาพ" }));
+            }
+            toast.error('ข้อมูลไม่ครบถ้วน กรุณาตรวจสอบเพิ่มเติม')
+            setSubmitLoading(false)
+            return
+        }
+
+
+        try{
         const sanitizedObj = sanitizeRecipeBody(recipeBody)
         const createRes = await recipeApi.create(sanitizedObj)
         const recipeId = createRes.data.step[0].recipeId
@@ -56,6 +96,8 @@ const handleClickSaveRecipe = async () => {
 
         const initState = cloneDeep(recipeBodyExample)
         setRecipeBody(initState)
+        setSubmitLoading(false)
+        toast.success('เพิ่มสูตรอาหารเรียบร้อย')
         navigate(`/recipe/${recipeId}`)
     } catch (err) {
         console.log(err)
@@ -71,9 +113,11 @@ setPictures = {setPictures}
 />
 <IngredientForm />
 <StepForm />
-<Button 
-onClick={handleClickSaveRecipe}
-color="green" semibold>บันทึกสูตรอาหาร</Button>
+<button
+    className={`px-2 py-2 bg-emerald-400 hover:bg-emerald-500 w-full font-semibold text-xl rounded-md grow flex justify-center items-center h-[52px]`}
+    onClick={handleClickSaveRecipe}
+    > {submitLoading? <PulseDot /> : "บันทึกสูตรอาหาร"}
+    </button>
 </div>
 )
 }
