@@ -1,6 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import { getAccessToken, removeAccessToken, setAccessToken } from "../utils/local-storage";
 import authApi from "../apis/auth";
+import { toast } from "sonner";
 
 
 
@@ -37,6 +38,7 @@ const login = async (credentials) => {
 const logout = () => {
     removeAccessToken()
     setAuthUser(null)
+    toast.success('ออกจากระบบสำเร็จ')
 }
 
 const contextValue = {authUser, login, logout, fetchUser}

@@ -5,6 +5,7 @@ import validate from "../../../validators/auth-validate";
 import { useNavigate } from "react-router-dom";
 import authApi from "../../../apis/auth";
 import { AuthContext } from "../../../contexts/AuthContext";
+import { toast } from "sonner";
 
 const initInput = {
     userName: '',
@@ -59,6 +60,7 @@ export default function RegisterForm () {
             }
 
             await login(loginCredentials)
+            toast.success('สมัครสมาชิกเรียบร้อย')
 
             navigate('/')
 

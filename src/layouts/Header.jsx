@@ -20,7 +20,7 @@ export default function Header () {
 
 
     return <>
-    <div className='flex justify-between px-4 h-[92px]'>
+    <div className='flex justify-between px-4 h-[92px] mb-4 bg-amber-100'>
         <div className=''>
             <Link to='/'>
         <img src={MainLogo} alt='logo' />
