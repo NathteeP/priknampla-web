@@ -28,7 +28,7 @@ const navigate = useNavigate()
 const sanitizeRecipeBody = recipeBody => {
 const sanitizedObj = cloneDeep(recipeBody)
 
-for (let i in sanitizedObj.ingredientsTable) {
+for (let i = sanitizedObj.ingredientsTable.length - 1; i >= 0; i--)  {
     const el = sanitizedObj.ingredientsTable[i]
     if (el) {
     delete el.tableKey
@@ -41,7 +41,7 @@ for (let i in sanitizedObj.ingredientsTable) {
     else sanitizedObj.ingredientsTable.splice(i,1)
 }
     
-for (let i in sanitizedObj.step) {
+for (let i = sanitizedObj.step.length - 1; i >= 0; i--) {
     sanitizedObj.step[i]
     ? delete sanitizedObj.step[i].stepKey
     : sanitizedObj.step.splice(i,1)

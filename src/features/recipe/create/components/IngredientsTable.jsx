@@ -22,8 +22,10 @@ const emptyIngredientError = {
 export default function IngredientsTable({header,tableKey,setTableHeader,deleteTable,error}) {
 
 const {recipeBody, setRecipeBody, recipeError, setRecipeError} = useContext(CreateRecipeContext)
-const ingredients = recipeBody.ingredientsTable[tableKey-1]?.ingredient
-
+const oldIngredients = recipeBody.ingredientsTable[tableKey-1]?.ingredient
+const ingredients = oldIngredients.map((el,i) => {
+    return {...el, ingredientsKey:i+1}
+})
 
 const addIngredient = () => {
     setRecipeBody(prev => {
@@ -37,6 +39,7 @@ const addIngredient = () => {
         newErrorValue.ingredientsTable[tableKey - 1].ingredient?.push({ ...emptyIngredientError, ingredientsKey: ingredients.length + 1 });
         return newErrorValue;
     })
+
 }
 
 return     <div className="bg-lime-200 rounded-lg p-4 flex flex-col gap-4 relative">

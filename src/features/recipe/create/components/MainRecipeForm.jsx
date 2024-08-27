@@ -11,9 +11,10 @@ const {
     setRecipeBody,
     recipeError,
     setRecipeError,
+    isEditForm
 } = useContext(CreateRecipeContext)
 
-const input = recipeBody?.recipe
+const input = recipeBody?.recipe || recipeBody
 const formError = recipeError?.recipe
 
 
@@ -48,7 +49,7 @@ error={formError.preparedTime}
 value={input.description} onChange={handleChangeInput}
 error={formError.description}
 />
-<div>
+{isEditForm ? null : <div>
     <label htmlFor="picture">ภาพประกอบ</label>
     {pictures? <img 
     src={URL.createObjectURL(pictures)} /> : null}
@@ -60,7 +61,7 @@ error={formError.description}
     id="picture"
     />
     {recipeError.picture && <small className="text-red-500">{recipeError.picture}</small>}
-</div>
+</div>}
 </div>
     )
 }

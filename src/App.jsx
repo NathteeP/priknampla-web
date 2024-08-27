@@ -4,6 +4,7 @@ import AuthContextProvider from "./contexts/AuthContext"
 import SearchContextProvider from "./contexts/SearchContext"
 import FavContextProvider from "./contexts/FavContext"
 import { Toaster } from "sonner"
+import CreateRecipeContextProvider from "./features/recipe/create/CreateRecipeContext"
 
 function App() {
 
@@ -24,7 +25,9 @@ function App() {
           },
         }}
       />
+      <CreateRecipeContextProvider>
       <Router />
+      </CreateRecipeContextProvider>
         </FavContextProvider>
       </SearchContextProvider>
     </AuthContextProvider>

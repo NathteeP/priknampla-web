@@ -6,7 +6,7 @@ import { CreateRecipeContext } from "../CreateRecipeContext"
 
 export default function Step ({stepKey, header, description, error}) {
 
-const {setRecipeBody} = useContext(CreateRecipeContext)
+const {setRecipeBody, isEditForm} = useContext(CreateRecipeContext)
 
 const handleChangeInput = e => {
     setRecipeBody(prev => {
@@ -18,10 +18,14 @@ const handleChangeInput = e => {
 
 const deleteStep = () => {
     setRecipeBody(prev => {
-        const newValue = {...prev}
-        newValue.step[stepKey-1] = null
+        const newValue = { ...prev }
+        if (isEditForm) {
+            newValue.step.splice(stepKey - 1, 1)
+        } else {
+            newValue.step[stepKey-1] = null
+        }
         return newValue
-    })
+})
 }
 
     return <div className="flex flex-col gap-1">

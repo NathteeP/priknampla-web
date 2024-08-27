@@ -5,7 +5,7 @@ import { CreateRecipeContext } from "../CreateRecipeContext";
 
 export default function Ingredient ({name, amount, unit, ingredientsKey, tableKey}) {
 
-const {setRecipeBody} = useContext(CreateRecipeContext)
+const {setRecipeBody, isEditForm} = useContext(CreateRecipeContext)
 
 const handleChangeInput = e => {
     setRecipeBody(prev => {
@@ -18,11 +18,14 @@ const handleChangeInput = e => {
 
 const deleteIngredient = () => {
     setRecipeBody(prev => {
-        const newValue = {...prev}
-        newValue.ingredientsTable[tableKey-1]
-        .ingredient[ingredientsKey-1] = null
-        return newValue
-    })
+        const newValue = { ...prev };
+        if (isEditForm) {
+            newValue.ingredientsTable[tableKey-1].ingredient.splice(ingredientsKey - 1, 1)
+        } else {
+            newValue.ingredientsTable[tableKey - 1].ingredient[ingredientsKey-1] = null
+        }
+        return newValue;
+    });
 }
 
     return <div className="relative">

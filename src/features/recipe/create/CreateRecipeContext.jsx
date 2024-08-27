@@ -46,14 +46,15 @@ export default function CreateRecipeContextProvider({children}) {
 const initState = cloneDeep(recipeBodyExample)
 const [recipeBody, setRecipeBody] = useState(initState)
 const [recipeError, setRecipeError] = useState(initError)
+const [isEditForm, setIsEditForm] = useState(false)
 
 const validateRecipeBody = (recipeBody) => {
     const errors = cloneDeep(initError);
 
     // Validate recipe name, description, and preparedTime
-    if (!recipeBody.recipe.name) errors.recipe.name = "กรุณาใส่ชื่อสูตรอาหาร";
-    if (!recipeBody.recipe.description) errors.recipe.description = "กรุณาใส่คำอธิบาย";
-    if (!recipeBody.recipe.preparedTime || isNaN(recipeBody.recipe.preparedTime)) 
+    if (!recipeBody.recipe?.name) errors.recipe.name = "กรุณาใส่ชื่อสูตรอาหาร";
+    if (!recipeBody.recipe?.description) errors.recipe.description = "กรุณาใส่คำอธิบาย";
+    if (!recipeBody.recipe?.preparedTime || isNaN(recipeBody.recipe?.preparedTime)) 
         errors.recipe.preparedTime = "กรุณาใส่เวลาเตรียม (ตัวเลข)";
 
     // Validate ingredients
@@ -61,14 +62,12 @@ const validateRecipeBody = (recipeBody) => {
         if (!table.header) errors.ingredientsTable[tableIndex].header = "กรุณาใส่ชื่อหัวข้อ";
     });
 
-    console.log("context",errors)
-    console.log("recipeBody" , recipeBody)
 
     // Validate steps
     recipeBody.step.forEach((step, stepIndex) => {
         if(step){
             if (!step.header) errors.step[stepIndex].header = "กรุณาใส่ชื่อขั้นตอน";
-            if (!step.description) errors.step[stepIndex].description = "กรุณาใส่คำอธิบาย";
+
         }
     });
 
@@ -83,6 +82,8 @@ const contextValue = {
     recipeError,
     setRecipeError,
     validateRecipeBody,
+    isEditForm,
+    setIsEditForm
 }
 
 return <CreateRecipeContext.Provider

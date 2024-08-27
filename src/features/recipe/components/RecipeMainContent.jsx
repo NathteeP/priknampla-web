@@ -8,6 +8,7 @@ import { AuthContext } from "../../../contexts/AuthContext";
 import { useEffect } from "react";
 import { useState } from "react";
 import recipeApi from "../../../apis/recipe";
+import { useNavigate } from "react-router-dom";
 
 export default function RecipeMainContent ({recipe}) {
 
@@ -15,6 +16,7 @@ export default function RecipeMainContent ({recipe}) {
     const {authUser, fetchUser} = useContext(AuthContext)
     const [isUserFav, setIsUserFav] = useState(false)
     const [recipeRating, setRecipeRating] = useState([])
+    const navigate = useNavigate()
 
     useEffect(() => {
         fetchUser()
@@ -71,13 +73,13 @@ export default function RecipeMainContent ({recipe}) {
         }
 
 
-
-
-    
-
     return <div className="flex min-h-[50vh]">
     <div className="flex flex-col gap-2 w-3/5 pr-8 justify-between">
+        <div>
         <h1 className="text-3xl font-semibold">{recipe?.name}</h1>
+        {authUser?.displayName === recipe?.user?.displayName ? 
+        <Button onClick={()=> navigate(`edit`)}>แก้ไขสูตรอาหาร</Button>: null}
+        </div>
         <div></div>
         <h2>โดย คุณ {recipe?.user?.displayName}</h2>
         <h2>เวลาเตรียม {recipe?.preparedTime} นาที</h2>

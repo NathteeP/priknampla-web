@@ -19,7 +19,10 @@ const emptyStepError = {
 export default function StepForm () {
 
 const {recipeBody, setRecipeBody, recipeError, setRecipeError} = useContext(CreateRecipeContext)
-const steps = recipeBody?.step
+const oldSteps = recipeBody?.step
+const steps = oldSteps.map((el,i) => {
+    return {...el, stepKey:i+1}
+})
 
 const addStep = () => {
     setRecipeBody(prev => {

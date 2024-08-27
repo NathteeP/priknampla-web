@@ -6,7 +6,7 @@ import { CreateRecipeContext } from "../CreateRecipeContext";
 
 export default function IngredientForm () {
 
-const {recipeBody, setRecipeBody, recipeError, setRecipeError} = useContext(CreateRecipeContext)
+const {recipeBody, setRecipeBody, recipeError, setRecipeError, isEditForm} = useContext(CreateRecipeContext)
 
 const emptyTable = {
     "header": "",
@@ -47,7 +47,10 @@ const emptyTableError = {
 };
 
 
-const table = recipeBody?.ingredientsTable
+const oldTable = recipeBody?.ingredientsTable || []
+const table = oldTable.map((el,i) => {
+    return {...el, tableKey:i+1}
+})
 
 const setTableHeader = (tableKey,header) => {
     setRecipeBody(prev => {
@@ -74,10 +77,16 @@ const createTable = () => {
 
 
 const deleteTable = tableKey => {
+
     setRecipeBody(prev => {
-        const newTableValue = {...prev}
-        newTableValue.ingredientsTable[tableKey-1] = null
-        return newTableValue
+        const newTableValue = { ...prev }
+        if (isEditForm) {
+            newTableValue.ingredientsTable.splice(tableKey - 1, 1);
+        } else {
+            newTableValue.ingredientsTable[tableKey - 1] = null;
+        }
+        console.log(newTableValue)
+        return newTableValue;
     })
 }
         

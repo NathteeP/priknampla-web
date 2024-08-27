@@ -4,6 +4,7 @@ import HomePage from '../pages/HomePage'
 import ProtectedRoute from '../features/authentication/components/ProtectedRoute'
 import FavoritePage from '../pages/FavoritePage'
 import CreateRecipeContextProvider from '../features/recipe/create/CreateRecipeContext'
+import EditRecipePage from '../pages/EditRecipePage'
 
 const LoginPage = lazy(() => import('../pages/LoginPage'))
 const RegisterPage = lazy(() => import('../pages/RegisterPage'))
@@ -21,10 +22,7 @@ const router = createBrowserRouter([
         children: [
             {path: '/', element: <HomePage />},
             {path: 'favorite', element: <FavoritePage />},
-            {path: 'create', element: (
-            <CreateRecipeContextProvider>
-                <CreateRecipePage />
-            </CreateRecipeContextProvider>)}
+            {path: 'create', element: <CreateRecipePage />},
         ]
     },
     {
@@ -42,6 +40,10 @@ const router = createBrowserRouter([
             {
                 path: ':recipeId',
                 element: <RecipePage />
+            },
+            {
+                path: ':recipeId/edit',
+                element: <EditRecipePage />
             },
             {
                 path: '',
